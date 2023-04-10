@@ -60,11 +60,7 @@ struct CustomNavBar: View {
         .background(Color.white)
     }
 }
-struct numberScreen: View {
-    var body: some View{
-        Text("HELLO")
-    }
-}
+
 struct protocolScreen: View {
     @State private var isShowingPopup = false
     @State private var popupContent = ""
@@ -185,3 +181,141 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
+struct numberScreen: View {
+    
+    let countries = [
+        "United States": "911",
+        "Canada": "911",
+        "Mexico": "911",
+        "Argentina": "911",
+        "Brazil": "190",
+        "Chile": "131",
+        "Colombia": "123",
+        "Costa Rica": "911",
+        "Cuba": "106",
+        "Dominican Republic": "911",
+        "Ecuador": "911",
+        "El Salvador": "911",
+        "Guatemala": "110",
+        "Haiti": "114",
+        "Honduras": "911",
+        "Jamaica": "119",
+        "Nicaragua": "118",
+        "Panama": "911",
+        "Paraguay": "911",
+        "Peru": "105",
+        "Puerto Rico": "911",
+        "Trinidad and Tobago": "999",
+        "Uruguay": "911",
+        "Venezuela": "171",
+        "United Kingdom": "999",
+        "Australia": "000",
+        "New Zealand": "111",
+        "China": "110",
+        "India": "112",
+        "Japan": "110",
+        "South Korea": "112",
+        "Indonesia": "110",
+        "Malaysia": "999",
+        "Philippines": "911",
+        "Singapore": "999",
+        "Thailand": "191",
+        "Vietnam": "113",
+        "France": "112",
+        "Germany": "112",
+        "Italy": "112",
+        "Netherlands": "112",
+        "Spain": "112",
+        "Sweden": "112",
+        "Switzerland": "112",
+        "Greece": "112",
+        "Turkey": "112",
+        "Russia": "112",
+        "South Africa": "10111",
+        "Egypt": "122",
+        "Nigeria": "112",
+        "Kenya": "112",
+        "Ghana": "112",
+        "Morocco": "190",
+        "Tanzania": "112",
+        "Uganda": "112",
+        "Algeria": "14",
+        "Sudan": "999",
+        "Mozambique": "112",
+        "Cameroon": "112",
+        "Madagascar": "117",
+        "Ivory Coast": "185",
+        "North Korea": "119",
+        "Taiwan": "110",
+        "Hong Kong": "999",
+        "Macau": "999"
+    ]
+
+    
+    @State private var selectedCountry = "United States"
+    @State private var searchText = ""
+    
+    var body: some View {
+        VStack {
+            HStack {
+                Text("Emergency Number")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .padding()
+                Spacer()
+            }
+            Divider()
+            VStack {
+                SearchBar(text: $searchText, placeholder: "Search countries")
+                ScrollView {
+                    ForEach(countries.filter { searchText.isEmpty || $0.key.localizedCaseInsensitiveContains(searchText) }, id: \.key) { country in
+                        Button(action: {
+                            selectedCountry = country.key
+                            if let url = URL(string: "tel://\(selectedCountry)"), UIApplication.shared.canOpenURL(url) {
+                                UIApplication.shared.open(url)
+                            }
+                        }, label: {
+                            HStack {
+                                Text(country.key)
+                                Spacer()
+                                Text(countries[country.key]!)
+                            }
+                            .padding(.horizontal)
+                        })
+                    }
+                }
+                .frame(height: 400)
+                .overlay(RoundedRectangle(cornerRadius: 10).stroke(Color.gray, lineWidth: 1))
+                .padding(.horizontal)
+            }
+            Divider()
+            HStack {
+                Spacer()
+                Text("Emergency number for \(selectedCountry): ")
+                    .fontWeight(.bold)
+                Text(countries[selectedCountry]!)
+                Spacer()
+            }
+            .padding()
+        }
+        .background(Color.white)
+        .zIndex(1)
+    }
+}
+
+struct SearchBar: View {
+    @Binding var text: String
+    var placeholder: String
+    
+    var body: some View {
+        HStack {
+            Image(systemName: "magnifyingglass")
+                .foregroundColor(.gray)
+            TextField(placeholder, text: $text)
+        }
+        .padding(.all, 10)
+        .background(Color(.systemGray6))
+        .cornerRadius(10)
+        .padding(.horizontal)
+    }
+}
