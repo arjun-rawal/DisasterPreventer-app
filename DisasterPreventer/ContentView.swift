@@ -271,8 +271,11 @@ struct numberScreen: View {
                     ForEach(countries.filter { searchText.isEmpty || $0.key.localizedCaseInsensitiveContains(searchText) }, id: \.key) { country in
                         Button(action: {
                             selectedCountry = country.key
-                            if let url = URL(string: "tel://\(selectedCountry)"), UIApplication.shared.canOpenURL(url) {
-                                UIApplication.shared.open(url)
+                            if let phoneNumber = countries[selectedCountry] {
+                                if let phoneURL = URL(string: "tel://\(phoneNumber)") {
+                                    UIApplication.shared.open(phoneURL, options: [:], completionHandler: nil)
+                                }
+                                print(phoneNumber)
                             }
                         }, label: {
                             HStack {
