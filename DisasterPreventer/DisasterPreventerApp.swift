@@ -7,11 +7,17 @@
 
 import SwiftUI
 
+
+
+
+
 @main
 struct DisasterPreventerApp: App {
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
         }
     }
 }
+
